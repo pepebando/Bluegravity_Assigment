@@ -16,6 +16,8 @@
 
 ABlueGravityCharacter::ABlueGravityCharacter()
 {
+	 Skate = CreateDefaultSubobject<USkeletalMeshComponent>("skate");
+	 Skate->SetupAttachment(RootComponent);
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 		
@@ -81,6 +83,7 @@ void ABlueGravityCharacter::SetupPlayerInputComponent(class UInputComponent* Pla
 
 		//Moving
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ABlueGravityCharacter::Move);
+		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Completed, this, &ABlueGravityCharacter::MoveCompleted);
 
 		//Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ABlueGravityCharacter::Look);
@@ -88,17 +91,24 @@ void ABlueGravityCharacter::SetupPlayerInputComponent(class UInputComponent* Pla
 	}
 
 }
-
+void ABlueGravityCharacter::MoveCompleted()
+{
+	UpKeyPressed = false;
+}
 void ABlueGravityCharacter::Move(const FInputActionValue& Value)
 {
+
 	// input is a Vector2D
 	FVector2D MovementVector = Value.Get<FVector2D>();
-
+	if (MovementVector.Y > 0){
+		UpKeyPressed = true;
+	}
 	if (Controller != nullptr)
 	{
 		// find out which way is forward
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
+		
 
 		// get forward vector
 		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
@@ -106,9 +116,10 @@ void ABlueGravityCharacter::Move(const FInputActionValue& Value)
 		// get right vector 
 		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 
+		const float FinalValueX = MovementVector.X * 0.01;
 		// add movement 
 		AddMovementInput(ForwardDirection, MovementVector.Y);
-		AddMovementInput(RightDirection, MovementVector.X);
+
 	}
 }
 
@@ -117,12 +128,13 @@ void ABlueGravityCharacter::Look(const FInputActionValue& Value)
 	// input is a Vector2D
 	FVector2D LookAxisVector = Value.Get<FVector2D>();
 
-	if (Controller != nullptr)
+	if (Controller != nullptr && UpKeyPressed)
 	{
 		// add yaw and pitch input to controller
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
+
 }
 
 

@@ -39,6 +39,13 @@ class ABlueGravityCharacter : public ACharacter
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UAnimSequence* JumpAnimation;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	USkeletalMeshComponent* Skate;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	bool UpKeyPressed;
+
 public:
 	ABlueGravityCharacter();
 	
@@ -50,7 +57,7 @@ protected:
 
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
-	
+	void MoveCompleted();
 
 protected:
 	// APawn interface
