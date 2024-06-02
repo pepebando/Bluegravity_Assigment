@@ -12,4 +12,12 @@ ABlueGravityGameMode::ABlueGravityGameMode()
 	{
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	}
+
+	
 }
+
+void ABlueGravityGameMode::AddGlobalPoints(float Value) {
+	GlobalScore += Value;
+	GEngine->AddOnScreenDebugMessage(-10, 1.f, FColor::Yellow, FString::Printf(TEXT("Score:"), GlobalScore));
+}
+

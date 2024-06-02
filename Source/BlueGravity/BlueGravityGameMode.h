@@ -11,8 +11,13 @@ class ABlueGravityGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	float GlobalScore;
+
 public:
 	ABlueGravityGameMode();
+	void AddGlobalPoints(float Value);
+
 };
 
 

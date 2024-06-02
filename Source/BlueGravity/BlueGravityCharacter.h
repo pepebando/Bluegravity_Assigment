@@ -39,6 +39,17 @@ class ABlueGravityCharacter : public ACharacter
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UAnimSequence* JumpAnimation;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Meshes, meta = (AllowPrivateAccess = "true"))
+	USkeletalMeshComponent* Skate;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	bool UpKeyPressed;
+	
+	UFUNCTION(BlueprintCallable, Category = "MyBlueprintFunctionLibrary")
+	void GetSocketLocationForLegs(FVector& FL_out, FVector& BL_out);
+
+
 public:
 	ABlueGravityCharacter();
 	
@@ -50,6 +61,8 @@ protected:
 
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
+	void MoveCompleted();
+	void CalculateSkateRotation();
 	
 
 protected:
@@ -65,6 +78,6 @@ public:
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
-
+	virtual void Tick(float DeltaTime) override;
 };
 
