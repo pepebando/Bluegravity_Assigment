@@ -45,6 +45,9 @@ class ABlueGravityCharacter : public ACharacter
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	bool UpKeyPressed;
+	
+	UFUNCTION(BlueprintCallable, Category = "MyBlueprintFunctionLibrary")
+	void GetSocketLocationForLegs(FVector& FL_out, FVector& BL_out);
 
 public:
 	ABlueGravityCharacter();
@@ -58,6 +61,8 @@ protected:
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
 	void MoveCompleted();
+	void CalculateSkateRotation();
+
 
 protected:
 	// APawn interface
@@ -72,6 +77,6 @@ public:
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
-
+	virtual void Tick(float DeltaTime) override;
 };
 
