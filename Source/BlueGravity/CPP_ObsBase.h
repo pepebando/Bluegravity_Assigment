@@ -32,6 +32,8 @@ class BLUEGRAVITY_API ACPP_ObsBase : public AActor
 
 	UPROPERTY(EditAnywhere, Category = "Mesh")
 	UStaticMesh* MeshToUse;
+
+	
 public:
 	// Sets default values for this actor's properties
 	ACPP_ObsBase();
@@ -39,7 +41,7 @@ public:
 
 protected:
 
-	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
+	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) ;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -50,6 +52,7 @@ protected:
 
 	UFUNCTION()
 	void OnErrorBoxBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
 
 	void AddPoints();
 

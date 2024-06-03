@@ -4,7 +4,11 @@
 #include "BlueGravityCharacter.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetSystemLibrary.h"
+#include "TimerManager.h"
+#include "CPP_GameInstace.h"
 #include "CPP_ObsBase.h"
+
 ABlueGravityGameMode::ABlueGravityGameMode()
 {
 	// set default pawn class to our Blueprinted character
@@ -21,24 +25,25 @@ void ABlueGravityGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 	GetTotalObstacles();
-<<<<<<< Updated upstream
-
-=======
 	Time = 120;
 	GameOver = false;
->>>>>>> Stashed changes
 }
 
+//Initialize timer
+void ABlueGravityGameMode::GameStart() {
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ABlueGravityGameMode::TimerFunction, 1.0f, true);
+}
+
+//Add Score
 void ABlueGravityGameMode::AddGlobalPoints(float Value) {
 	GlobalScore += Value;
 }
 
+//Add Obstacles passed
 void ABlueGravityGameMode::AddGlobalObstacleCompleted() {
 	ObstaclesCompleted ++;
 }
 
-<<<<<<< Updated upstream
-=======
 //Reduce time until it reach 0
 void ABlueGravityGameMode::TimerFunction()
 {
@@ -66,7 +71,6 @@ void ABlueGravityGameMode::SendVariablesToInstance()
 
 
 //Get All Obstacles in map
->>>>>>> Stashed changes
 void ABlueGravityGameMode::GetTotalObstacles()
 {
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACPP_ObsBase::StaticClass(), ActorsObstaclesFound);
