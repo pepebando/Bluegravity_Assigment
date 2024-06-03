@@ -9,22 +9,19 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
-
-
+#include "DrawDebugHelpers.h"
+#include "Kismet/KismetMathLibrary.h"
 //////////////////////////////////////////////////////////////////////////
 // ABlueGravityCharacter
 
 ABlueGravityCharacter::ABlueGravityCharacter()
 {
-<<<<<<< Updated upstream
-=======
 	PrimaryActorTick.bCanEverTick = true;
 
 	//Create skate
 	Skate = CreateDefaultSubobject<USkeletalMeshComponent>("skate");
 	Skate->SetupAttachment(RootComponent);
 
->>>>>>> Stashed changes
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 
@@ -60,6 +57,11 @@ ABlueGravityCharacter::ABlueGravityCharacter()
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 }
 
+void ABlueGravityCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	CalculateSkateRotation();
+}
 void ABlueGravityCharacter::BeginPlay()
 {
 	// Call the base class  
@@ -90,6 +92,7 @@ void ABlueGravityCharacter::SetupPlayerInputComponent(class UInputComponent* Pla
 
 		//Moving
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ABlueGravityCharacter::Move);
+		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Completed, this, &ABlueGravityCharacter::MoveCompleted);
 
 		//Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ABlueGravityCharacter::Look);
@@ -97,42 +100,24 @@ void ABlueGravityCharacter::SetupPlayerInputComponent(class UInputComponent* Pla
 	}
 
 }
-<<<<<<< Updated upstream
-=======
 void ABlueGravityCharacter::MoveCompleted()
 {
 	UpKeyPressed = false;
 }
->>>>>>> Stashed changes
 
 void ABlueGravityCharacter::Move(const FInputActionValue& Value)
 {
+
 	// input is a Vector2D
 	FVector2D MovementVector = Value.Get<FVector2D>();
-<<<<<<< Updated upstream
-
-=======
 	if (MovementVector.Y > 0) {
 		UpKeyPressed = true;
 	}
->>>>>>> Stashed changes
 	if (Controller != nullptr)
 	{
 		// find out which way is forward
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
-<<<<<<< Updated upstream
-
-		// get forward vector
-		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-	
-		// get right vector 
-		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-
-		// add movement 
-		AddMovementInput(ForwardDirection, MovementVector.Y);
-		AddMovementInput(RightDirection, MovementVector.X);
-=======
 	;
 
 		// get forward vector of the skateboard
@@ -151,7 +136,6 @@ void ABlueGravityCharacter::Move(const FInputActionValue& Value)
 			GetCharacterMovement()->GroundFriction = 2;
 		}
 		AddMovementInput(RightDirection, FinalValueX);
->>>>>>> Stashed changes
 	}
 }
 
@@ -166,13 +150,6 @@ void ABlueGravityCharacter::Look(const FInputActionValue& Value)
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
-<<<<<<< Updated upstream
-}
-
-
-
-
-=======
 
 }
 void ABlueGravityCharacter::GetSocketLocationForLegs(FVector& FL_out, FVector& BL_out) {
@@ -215,7 +192,8 @@ void ABlueGravityCharacter::CalculateSkateRotation() {
 	FRotator FirstSkateRotator = UKismetMathLibrary::FindLookAtRotation(BWHIT, FWHIT);
 	FRotator FinalSkateRotator = UKismetMathLibrary::RInterpTo(Skate->GetComponentRotation(), FirstSkateRotator, GetWorld()->GetDeltaSeconds(), 20);
 	Skate->SetWorldRotation(FinalSkateRotator);
+
+	/*DEBUG LINES FOR THE SKATE ROTATION*/
 	//DrawDebugLine(GetWorld(), StartLineTraceFW, EndLineTraceFW, FColor::Green, true, 1.0f);
 	//DrawDebugLine(GetWorld(), StartLineTraceBW, EndLineTraceBW, FColor::Green, true, 1.0f);
 }
->>>>>>> Stashed changes

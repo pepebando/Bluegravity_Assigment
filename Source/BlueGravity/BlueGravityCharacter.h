@@ -37,10 +37,6 @@ class ABlueGravityCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* LookAction;
 
-<<<<<<< Updated upstream
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UAnimSequence* JumpAnimation;
-=======
 	/*Skate as a Skeletal Mesh*/
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Meshes, meta = (AllowPrivateAccess = "true"))
 	USkeletalMeshComponent* Skate;
@@ -50,11 +46,10 @@ class ABlueGravityCharacter : public ACharacter
 	bool UpKeyPressed;
 
 	/*Function that returns skate sockets*/
-	UFUNCTION(BlueprintCallable, Category = "MyBlueprintFunctionLibrary")
+	UFUNCTION(BlueprintCallable, Category = "FunctionLibrary")
 	void GetSocketLocationForLegs(FVector& FL_out, FVector& BL_out);
 
 
->>>>>>> Stashed changes
 public:
 	ABlueGravityCharacter();
 
@@ -66,7 +61,9 @@ protected:
 
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
-	
+	void MoveCompleted();
+	void CalculateSkateRotation();
+
 
 protected:
 	// APawn interface
@@ -81,12 +78,6 @@ public:
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
-<<<<<<< Updated upstream
-
-};
-
-=======
 	/*Tick override for linetrace use*/
 	virtual void Tick(float DeltaTime) override;
 };
->>>>>>> Stashed changes
