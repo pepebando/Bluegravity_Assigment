@@ -8,7 +8,7 @@
 #include "BlueGravityCharacter.generated.h"
 
 
-UCLASS(config=Game)
+UCLASS(config = Game)
 class ABlueGravityCharacter : public ACharacter
 {
 	GENERATED_BODY()
@@ -20,7 +20,7 @@ class ABlueGravityCharacter : public ACharacter
 	/** Follow camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
-	
+
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputMappingContext* DefaultMappingContext;
@@ -37,11 +37,27 @@ class ABlueGravityCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* LookAction;
 
+<<<<<<< Updated upstream
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UAnimSequence* JumpAnimation;
+=======
+	/*Skate as a Skeletal Mesh*/
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Meshes, meta = (AllowPrivateAccess = "true"))
+	USkeletalMeshComponent* Skate;
+
+	/*Boolean for acc animation*/
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	bool UpKeyPressed;
+
+	/*Function that returns skate sockets*/
+	UFUNCTION(BlueprintCallable, Category = "MyBlueprintFunctionLibrary")
+	void GetSocketLocationForLegs(FVector& FL_out, FVector& BL_out);
+
+
+>>>>>>> Stashed changes
 public:
 	ABlueGravityCharacter();
-	
+
 
 protected:
 
@@ -55,7 +71,7 @@ protected:
 protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	
+
 	// To add mapping context
 	virtual void BeginPlay();
 
@@ -65,6 +81,12 @@ public:
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
+<<<<<<< Updated upstream
 
 };
 
+=======
+	/*Tick override for linetrace use*/
+	virtual void Tick(float DeltaTime) override;
+};
+>>>>>>> Stashed changes

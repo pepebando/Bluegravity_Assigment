@@ -16,9 +16,18 @@
 
 ABlueGravityCharacter::ABlueGravityCharacter()
 {
+<<<<<<< Updated upstream
+=======
+	PrimaryActorTick.bCanEverTick = true;
+
+	//Create skate
+	Skate = CreateDefaultSubobject<USkeletalMeshComponent>("skate");
+	Skate->SetupAttachment(RootComponent);
+
+>>>>>>> Stashed changes
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
-		
+
 	// Don't rotate when the controller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
@@ -73,7 +82,7 @@ void ABlueGravityCharacter::SetupPlayerInputComponent(class UInputComponent* Pla
 {
 	// Set up action bindings
 	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent)) {
-		
+
 		//Jumping
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
@@ -88,17 +97,31 @@ void ABlueGravityCharacter::SetupPlayerInputComponent(class UInputComponent* Pla
 	}
 
 }
+<<<<<<< Updated upstream
+=======
+void ABlueGravityCharacter::MoveCompleted()
+{
+	UpKeyPressed = false;
+}
+>>>>>>> Stashed changes
 
 void ABlueGravityCharacter::Move(const FInputActionValue& Value)
 {
 	// input is a Vector2D
 	FVector2D MovementVector = Value.Get<FVector2D>();
+<<<<<<< Updated upstream
 
+=======
+	if (MovementVector.Y > 0) {
+		UpKeyPressed = true;
+	}
+>>>>>>> Stashed changes
 	if (Controller != nullptr)
 	{
 		// find out which way is forward
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
+<<<<<<< Updated upstream
 
 		// get forward vector
 		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
@@ -109,6 +132,26 @@ void ABlueGravityCharacter::Move(const FInputActionValue& Value)
 		// add movement 
 		AddMovementInput(ForwardDirection, MovementVector.Y);
 		AddMovementInput(RightDirection, MovementVector.X);
+=======
+	;
+
+		// get forward vector of the skateboard
+		const FVector ForwardDirection = Skate->GetForwardVector();
+		// get right vector of the skateboard
+		const FVector RightDirection = Skate->GetRightVector();
+		//reduce de right movement 
+		const float FinalValueX = MovementVector.X * 0.01;
+		// add movement 
+		if (MovementVector.Y > 0) {
+			AddMovementInput(ForwardDirection, MovementVector.Y);
+			GetCharacterMovement()->GroundFriction = 0.2;
+		}
+		else {
+			/*Change the ground friction to brake*/
+			GetCharacterMovement()->GroundFriction = 2;
+		}
+		AddMovementInput(RightDirection, FinalValueX);
+>>>>>>> Stashed changes
 	}
 }
 
@@ -123,8 +166,56 @@ void ABlueGravityCharacter::Look(const FInputActionValue& Value)
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
+<<<<<<< Updated upstream
 }
 
 
 
 
+=======
+
+}
+void ABlueGravityCharacter::GetSocketLocationForLegs(FVector& FL_out, FVector& BL_out) {
+	/*Function that returns sockets locations for animbp*/
+	FVector FLLocation = Skate->GetSocketLocation("FW");
+	FVector BLLocation = Skate->GetSocketLocation("BW");
+	FL_out = FLLocation;
+	BL_out = BLLocation;
+}
+
+void ABlueGravityCharacter::CalculateSkateRotation() {
+	/*Create 2 lines traces to the floor, to get the rotation of the surface and send it to the skateboard*/
+	FVector ForwardSocketSkateLocation = Skate->GetSocketLocation("FW");
+	FVector BackwardSocketSkateLocation = Skate->GetSocketLocation("BW");
+	FVector StartLineTraceFW = ForwardSocketSkateLocation + FVector(0, 0, 30);
+	FVector EndLineTraceFW = ForwardSocketSkateLocation + FVector(0, 0, -30);
+	FVector StartLineTraceBW = BackwardSocketSkateLocation + FVector(0, 0, 30);
+	FVector EndLineTraceBW = BackwardSocketSkateLocation + FVector(0, 0, -30);
+	FHitResult HitResultFW;
+	FHitResult HitResultBW;
+	FCollisionQueryParams Params;
+	FVector FWHIT;
+	FVector BWHIT;
+
+	Params.AddIgnoredActor(this);
+	if (GetWorld()->LineTraceSingleByChannel(HitResultFW, StartLineTraceFW, EndLineTraceFW, ECollisionChannel::ECC_Camera, Params, FCollisionResponseParams())) {
+		FWHIT = HitResultFW.Location;
+	}
+	else {
+		FWHIT = ForwardSocketSkateLocation;
+	}
+
+	if (GetWorld()->LineTraceSingleByChannel(HitResultBW, StartLineTraceBW, EndLineTraceBW, ECollisionChannel::ECC_Camera, Params, FCollisionResponseParams())) {
+		BWHIT = HitResultBW.Location;
+	}
+	else {
+		BWHIT = BackwardSocketSkateLocation;
+	}
+
+	FRotator FirstSkateRotator = UKismetMathLibrary::FindLookAtRotation(BWHIT, FWHIT);
+	FRotator FinalSkateRotator = UKismetMathLibrary::RInterpTo(Skate->GetComponentRotation(), FirstSkateRotator, GetWorld()->GetDeltaSeconds(), 20);
+	Skate->SetWorldRotation(FinalSkateRotator);
+	//DrawDebugLine(GetWorld(), StartLineTraceFW, EndLineTraceFW, FColor::Green, true, 1.0f);
+	//DrawDebugLine(GetWorld(), StartLineTraceBW, EndLineTraceBW, FColor::Green, true, 1.0f);
+}
+>>>>>>> Stashed changes
