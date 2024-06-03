@@ -21,7 +21,12 @@ void ABlueGravityGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 	GetTotalObstacles();
+<<<<<<< Updated upstream
 
+=======
+	Time = 120;
+	GameOver = false;
+>>>>>>> Stashed changes
 }
 
 void ABlueGravityGameMode::AddGlobalPoints(float Value) {
@@ -32,6 +37,36 @@ void ABlueGravityGameMode::AddGlobalObstacleCompleted() {
 	ObstaclesCompleted ++;
 }
 
+<<<<<<< Updated upstream
+=======
+//Reduce time until it reach 0
+void ABlueGravityGameMode::TimerFunction()
+{
+	if (GameOver == true) {
+		SendVariablesToInstance();
+		UGameplayStatics::OpenLevel(this, FName("/Game/GameOver"), true);
+
+		return;
+	}
+	Time--;
+}
+
+void ABlueGravityGameMode::SendVariablesToInstance()
+{
+	UCPP_GameInstace* GameInstance = Cast<UCPP_GameInstace>(GetGameInstance());
+
+	if (GameInstance)
+	{
+		// Access and modify variables
+		GameInstance->Instance_Obstacles = ObstaclesCompleted;
+		GameInstance->Instance_Score = GlobalScore;
+		GameInstance->Instance_Time = Time;
+	}
+}
+
+
+//Get All Obstacles in map
+>>>>>>> Stashed changes
 void ABlueGravityGameMode::GetTotalObstacles()
 {
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACPP_ObsBase::StaticClass(), ActorsObstaclesFound);

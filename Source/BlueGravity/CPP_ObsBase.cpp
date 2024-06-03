@@ -35,7 +35,7 @@ void ACPP_ObsBase::PostEditChangeProperty(FPropertyChangedEvent& PropertyChanged
 		{
 			ObsMesh->SetStaticMesh(MeshToUse);
 		}
-	Super::PostEditChangeProperty(PropertyChangedEvent);
+	//Super::PostEditChangeProperty(PropertyChangedEvent);
 }
 
 // Called when the game starts or when spawned

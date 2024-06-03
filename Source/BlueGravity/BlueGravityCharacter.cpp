@@ -140,7 +140,7 @@ void ABlueGravityCharacter::Move(const FInputActionValue& Value)
 		// get right vector of the skateboard
 		const FVector RightDirection = Skate->GetRightVector();
 		//reduce de right movement 
-		const float FinalValueX = MovementVector.X * 0.01;
+		const float FinalValueX = MovementVector.X * 0.1;
 		// add movement 
 		if (MovementVector.Y > 0) {
 			AddMovementInput(ForwardDirection, MovementVector.Y);
